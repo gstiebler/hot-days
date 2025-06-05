@@ -2,6 +2,8 @@
 
 This Streamlit web application provides an interactive platform for analyzing historical temperature data for any location worldwide. Users can input coordinates and a date range to fetch and visualize temperature distributions, identify trends in cold and hot days, and view summary statistics.
 
+**✨ Now available online at: [https://hot-days.streamlit.app/](https://hot-days.streamlit.app/) ✨**
+
 ## 📊 Features
 
 * **Interactive Location Input**: Specify latitude and longitude for precise location analysis.
