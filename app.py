@@ -285,6 +285,90 @@ if submit_button:
                             help="Difference between hottest max and coldest min"
                         )
                     
+                    # Add detailed statistical tables
+                    st.subheader("📋 Detailed Temperature Statistics")
+                    
+                    # Create frequency tables for every 5°C
+                    st.markdown("**Temperature Frequency Analysis (5°C Intervals)**")
+                    
+                    # Minimum temperature frequency table
+                    st.markdown("*Minimum Temperature Frequency*")
+                    min_temp_rounded = np.floor(df['temperature_2m_min'].min() / 5) * 5
+                    max_temp_rounded = np.ceil(df['temperature_2m_min'].max() / 5) * 5
+                    temp_thresholds = np.arange(min_temp_rounded, max_temp_rounded + 5, 5)
+                    
+                    freq_data_min = []
+                    for temp in temp_thresholds:
+                        colder_count = len(df[df['temperature_2m_min'] < temp])
+                        warmer_count = len(df[df['temperature_2m_min'] >= temp])
+                        freq_data_min.append({
+                            'Temperature': f"{temp:.0f}°C",
+                            'Days Colder': colder_count,
+                            'Days Warmer': warmer_count
+                        })
+                    
+                    freq_df_min = pd.DataFrame(freq_data_min)
+                    st.dataframe(freq_df_min, use_container_width=True)
+                    
+                    # Maximum temperature frequency table
+                    st.markdown("*Maximum Temperature Frequency*")
+                    min_temp_max_rounded = np.floor(df['temperature_2m_max'].min() / 5) * 5
+                    max_temp_max_rounded = np.ceil(df['temperature_2m_max'].max() / 5) * 5
+                    temp_thresholds_max = np.arange(min_temp_max_rounded, max_temp_max_rounded + 5, 5)
+                    
+                    freq_data_max = []
+                    for temp in temp_thresholds_max:
+                        colder_count = len(df[df['temperature_2m_max'] < temp])
+                        warmer_count = len(df[df['temperature_2m_max'] >= temp])
+                        freq_data_max.append({
+                            'Temperature': f"{temp:.0f}°C",
+                            'Days Colder': colder_count,
+                            'Days Warmer': warmer_count
+                        })
+                    
+                    freq_df_max = pd.DataFrame(freq_data_max)
+                    st.dataframe(freq_df_max, use_container_width=True)
+                    
+                    # Percentile tables
+                    st.markdown("**Temperature Percentile Analysis**")
+                    
+                    # Minimum temperature percentiles
+                    st.markdown("*Minimum Temperature Percentiles*")
+                    percentiles = range(10, 100, 10)
+                    percentile_data_min = []
+                    
+                    for p in percentiles:
+                        temp_value = np.percentile(df['temperature_2m_min'], p)
+                        colder_count = len(df[df['temperature_2m_min'] <= temp_value])
+                        warmer_count = len(df[df['temperature_2m_min'] > temp_value])
+                        percentile_data_min.append({
+                            'Percentile': f"{p}%",
+                            'Temperature': f"{temp_value:.1f}°C",
+                            'Days Colder/Equal': colder_count,
+                            'Days Warmer': warmer_count
+                        })
+                    
+                    percentile_df_min = pd.DataFrame(percentile_data_min)
+                    st.dataframe(percentile_df_min, use_container_width=True)
+                    
+                    # Maximum temperature percentiles
+                    st.markdown("*Maximum Temperature Percentiles*")
+                    percentile_data_max = []
+                    
+                    for p in percentiles:
+                        temp_value = np.percentile(df['temperature_2m_max'], p)
+                        colder_count = len(df[df['temperature_2m_max'] <= temp_value])
+                        warmer_count = len(df[df['temperature_2m_max'] > temp_value])
+                        percentile_data_max.append({
+                            'Percentile': f"{p}%",
+                            'Temperature': f"{temp_value:.1f}°C",
+                            'Days Colder/Equal': colder_count,
+                            'Days Warmer': warmer_count
+                        })
+                    
+                    percentile_df_max = pd.DataFrame(percentile_data_max)
+                    st.dataframe(percentile_df_max, use_container_width=True)
+                    
                     # Show raw data option
                     with st.expander("📋 View Raw Temperature Data"):
                         st.dataframe(
